@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDiR Maresme - Programa Senior: Recupera tu vitalidad</title>
+    
+    <!-- 1. IMPORTAR TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. CONFIGURACIÓN DE FUENTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- 3. IMPORTAR ICONOS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Configuración de estilos personalizados -->
+    <style>
+        body { font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3, h4, button, .font-title { font-family: 'Montserrat', sans-serif; }
+        
+        /* Color azul BDiR personalizado (mantenido) */
+        .text-bdir-blue { color: #009FE3; }
+        .bg-bdir-blue { background-color: #009FE3; }
+        .border-bdir-blue { border-color: #009FE3; }
+        .hover-bg-bdir-dark:hover { background-color: #007bb0; }
+        .ring-bdir-blue:focus { --tw-ring-color: #009FE3; }
+        
+        /* Estilos para el selector de idioma */
+        .lang-btn { cursor: pointer; transition: opacity 0.2s; }
+        .lang-btn.active { font-weight: bold; text-decoration: underline; color: #009FE3; }
+        .lang-btn:hover { opacity: 0.8; }
+        
+        /* Loading spinner para el botón */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        html { scroll-behavior: smooth; }
+        
+        /* Estilos para el modal */
+        .modal-overlay {
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+    <meta name="description" content="Programa Senior en BDiR Maresme: ejercicio adaptado para recuperar movilidad, fuerza y confianza. Asesoría gratuita.">
+</head>
+<body class="min-h-screen bg-white font-sans text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- --- HERO SECTION --- -->
+    <header class="relative bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+                
+                <!-- SVG Fondo -->
+                <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <polygon points="50,0 100,0 50,100 0,100" />
+                </svg>
+
+                <!-- HEADER SUPERIOR: LOGO + IDIOMAS -->
+                <div class="pt-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <!-- LOGO (BDiR MARESME) - ENLACE AL HOME -->
+                    <div class="flex items-center cursor-pointer" onclick="redirectToHome()">
+                        <div class="text-2xl font-bold tracking-tighter text-bdir-blue font-title">
+                            BDiR <span class="font-light text-gray-500 ml-1">Maresme</span>
+                        </div>
+                    </div>
+                    
+                    <!-- SELECTOR DE IDIOMA -->
+                    <div class="flex space-x-2 text-sm font-semibold text-gray-500 z-50 relative">
+                        <button onclick="changeLanguage('es')" id="btn-es" class="lang-btn active">ES</button>
+                        <span>|</span>
+                        <button onclick="changeLanguage('ca')" id="btn-ca" class="lang-btn">CA</button>
+                    </div>
+                </div>
+
+                <main class="mt-10 mx-auto px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                    <div class="sm:text-center lg:text-left">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                            <span class="block xl:inline" data-i18n="hero_title_1">Recupera tu vitalidad</span>
+                            <span class="block text-bdir-blue xl:inline" data-i18n="hero_title_2">Ejercicio adaptado para personas mayores</span>
+                        </h1>
+                        <p class="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" data-i18n="hero_subtitle">
+                            Programas seguros y personalizados para mejorar movilidad, fuerza y confianza. Actividad en grupo y acompañamiento profesional.
+                        </p>
+                        
+                        <!-- Botón Móvil -->
+                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start lg:hidden">
+                            <a href="#formulario" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-bdir-blue hover:bg-[#007bb0]">
+                                Solicitar Asesoría Gratis
+                            </a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- IMAGEN HERO Y CONTENEDOR FORMULARIO -->
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100 flex items-center justify-center relative h-96 lg:h-auto">
+            <!-- Imagen de fondo -->
+            <div class="absolute inset-0 w-full h-full">
+                <img class="h-full w-full object-cover opacity-90" src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=2070&auto=format&fit=crop" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=2070&auto=format&fit=crop'">
+                <div class="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent lg:via-transparent"></div>
+            </div>
+
+            <!-- FORMULARIO FLOTANTE -->
+            <div id="formulario" class="relative z-20 w-full max-w-md px-4 py-10 lg:mr-12">
+                <div class="bg-white rounded-xl shadow-2xl p-6 border-t-4 border-bdir-blue">
+                    
+                    <!-- Vista del Formulario -->
+                    <div id="form-view">
+                        <h3 class="text-xl font-bold text-gray-900 text-center mb-2 font-title" data-i18n="form_title">
+                            Asesoría Senior Gratuita
+                        </h3>
+                        <p class="text-sm text-gray-600 text-center mb-6" data-i18n="form_subtitle">
+                            Rellena el formulario y te llamamos para valorar un plan de ejercicio a tu ritmo, seguro y personalizado.
+                        </p>
+                        
+                        <!-- FORMULARIO ACTUALIZADO PARA ENVÍO REAL -->
+                        <form onsubmit="submitForm(event)" class="space-y-4">
+                            <!-- Campos Ocultos de Configuración FormSubmit -->
+                            <input type="hidden" name="_subject" value="Nuevo Lead Senior - Landing">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_template" value="table">
+
+                            <div>
+                                <label for="name" class="sr-only" data-i18n="label_name">Nombre y Apellidos</label>
+                                <input type="text" id="name" name="nombre" required placeholder="Nombre y Apellidos" class="block w-full rounded-md border-gray-300 bg-gray-50 border px-4 py-3 text-gray-900 focus:ring-bdir-blue focus:border-bdir-blue" data-i18n-placeholder="placeholder_name">
+                            </div>
+                            <div>
+                                <label for="phone" class="sr-only" data-i18n="label_phone">Teléfono Móvil</label>
+                                <input type="tel" id="phone" name="telefono" required placeholder="Teléfono Móvil" class="block w-full rounded-md border-gray-300 bg-gray-50 border px-4 py-3 text-gray-900 focus:ring-bdir-blue focus:border-bdir-blue" data-i18n-placeholder="placeholder_phone">
+                            </div>
+                            <div>
+                                <label for="email" class="sr-only" data-i18n="label_email">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" required placeholder="Correo Electrónico" class="block w-full rounded-md border-gray-300 bg-gray-50 border px-4 py-3 text-gray-900 focus:ring-bdir-blue focus:border-bdir-blue" data-i18n-placeholder="placeholder_email">
+                            </div>
+                            <!-- Preferencia de contacto -->
+                            <div>
+                                <label for="contact_preference" class="sr-only" data-i18n="label_contact_pref">Forma de contacto preferida</label>
+                                <select id="contact_preference" name="preferencia_contacto" class="block w-full rounded-md border-gray-300 bg-gray-50 border px-4 py-3 text-gray-900 focus:border-bdir-blue focus:ring-bdir-blue">
+                                    <option value="" disabled selected data-i18n="placeholder_contact_pref">¿Cómo prefieres que te contactemos?</option>
+                                    <option value="phone" data-i18n="option_phone">Llamada telefónica</option>
+                                    <option value="whatsapp" data-i18n="option_whatsapp">WhatsApp</option>
+                                    <option value="email" data-i18n="option_email">Email</option>
+                                </select>
+                            </div>
+
+                            <!-- CASILLA DE ACEPTACIÓN LEGAL (REQUERIDA) -->
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="accept_legal" name="acepta_legal" type="checkbox" required class="focus:ring-bdir-blue h-4 w-4 text-bdir-blue border-gray-300 rounded cursor-pointer">
+                                </div>
+                                <div class="ml-3 text-xs leading-5">
+                                    <label for="accept_legal" class="font-medium text-gray-600">
+                                        <span data-i18n="form_accept_prefix">He leído y acepto la</span>
+                                        <button type="button" onclick="openModal('privacy')" class="text-bdir-blue hover:text-[#007bb0] underline" data-i18n="form_link_privacy">Política de Privacidad</button>
+                                        <span data-i18n="form_accept_and">y los</span>
+                                        <button type="button" onclick="openModal('legal')" class="text-bdir-blue hover:text-[#007bb0] underline" data-i18n="form_link_terms">Términos Legales</button>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- FIN CASILLA -->
+
+                            <button id="submit-btn" type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-bdir-blue hover:bg-[#007bb0]">
+                                <span data-i18n="form_button">QUIERO MI ASESORÍA GRATUITA >></span>
+                            </button>
+                            <p class="text-xs text-center text-gray-400 mt-2" data-i18n="form_privacy">
+                                Tus datos se usan sólo para gestionar tu cita. No compartiremos tu información.
+                            </p>
+                        </form>
+                    </div>
+
+                    <!-- Vista de Éxito -->
+                    <div id="success-view" class="hidden text-center py-10">
+                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                            <i data-lucide="check-circle" class="h-8 w-8 text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 font-title" data-i18n="success_title">¡Solicitud Recibida!</h3>
+                        <p class="mt-2 text-sm text-gray-500" data-i18n="success_msg">
+                            Nos pondremos en contacto contigo muy pronto para agendar tu asesoría personalizada.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- --- BENEFICIOS SECTION --- -->
+    <section class="py-16 bg-[#F5F5F5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    <span data-i18n="benefits_title_1">Recupera movimiento y confianza</span> <br class="hidden sm:block"/>
+                    <span class="text-gray-500 text-2xl font-normal" data-i18n="benefits_title_2">Programas pensados para mayores</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Feature 1: Movilidad y Equilibrio -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 text-bdir-blue mb-6">
+                        <i data-lucide="activity" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 font-title" data-i18n="benefit_1_title">Movilidad y Equilibrio</h3>
+                    <p class="text-gray-600 leading-relaxed" data-i18n="benefit_1_desc">
+                        Ejercicios suaves y progresivos que reducen caídas y mejoran la independencia en las actividades diarias.
+                    </p>
+                </div>
+
+                <!-- Feature 2: Fuerza funcional -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 text-bdir-blue mb-6">
+                        <i data-lucide="dumbbell" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 font-title" data-i18n="benefit_2_title">Fuerza Funcional</h3>
+                    <p class="text-gray-600 leading-relaxed" data-i18n="benefit_2_desc">
+                        Trabajo de fuerza adaptado para mantener autonomía: subir escaleras, incorporarse o llevar bolsas con seguridad.
+                    </p>
+                </div>
+
+                <!-- Feature 3: Social y Bienestar -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 text-bdir-blue mb-6">
+                        <i data-lucide="users" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3 font-title" data-i18n="benefit_3_title">Compañía y Bienestar</h3>
+                    <p class="text-gray-600 leading-relaxed" data-i18n="benefit_3_desc">
+                        Clases en grupo y apoyo del equipo profesional para recuperar confianza, mejorar el ánimo y socializar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- SOCIAL PROOF / TESTIMONIAL --- -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg text-gray-500 font-medium mb-8 italic" data-i18n="social_proof_intro">
+                "Volví a sentirme fuerte y segura para hacer mi vida cotidiana."
+            </p>
+            
+            <div class="bg-blue-50 rounded-2xl p-8 shadow-inner relative overflow-hidden">
+                <div class="absolute top-0 left-0 opacity-10 transform -translate-x-4 -translate-y-4">
+                    <i data-lucide="star" class="h-32 w-32 text-bdir-blue fill-current"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-center mb-4 space-x-1">
+                        <i data-lucide="star" class="h-6 w-6 text-yellow-400 fill-current"></i>
+                        <i data-lucide="star" class="h-6 w-6 text-yellow-400 fill-current"></i>
+                        <i data-lucide="star" class="h-6 w-6 text-yellow-400 fill-current"></i>
+                        <i data-lucide="star" class="h-6 w-6 text-yellow-400 fill-current"></i>
+                        <i data-lucide="star" class="h-6 w-6 text-yellow-400 fill-current"></i>
+                    </div>
+                    <blockquote class="text-xl text-gray-800 font-medium mb-6" data-i18n="testimonial_quote">
+                        "Gracias al equipo he recuperado la confianza para salir a pasear y jugar con mis nietos."
+                    </blockquote>
+                    <div class="flex items-center justify-center space-x-4">
+                        <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center text-gray-500 font-bold">
+                            LC
+                        </div>
+                        <div class="text-left">
+                            <div class="font-bold text-gray-900">Lidia C.</div>
+                            <div class="text-sm text-gray-500">Premià de Dalt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- CTA FINAL --- -->
+    <section class="relative py-20 bg-bdir-blue">
+        <div class="absolute inset-0 overflow-hidden">
+             <div class="absolute -top-24 -left-24 w-96 h-96 bg-white opacity-10 rounded-full mix-blend-overlay blur-3xl"></div>
+             <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-900 opacity-20 rounded-full mix-blend-overlay blur-3xl"></div>
+        </div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl mb-6" data-i18n="cta_final_title">
+                Recupera energía, equilibrio y autonomía
+            </h2>
+            <p class="text-xl text-blue-100 mb-10 max-w-2xl mx-auto" data-i18n="cta_final_desc">
+                Empieza con una asesoría gratuita para valorar tu estado y diseñar un plan seguro a tu ritmo.
+            </p>
+            <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="inline-block bg-white py-4 px-10 border border-transparent rounded-md shadow-lg text-lg font-bold text-bdir-blue hover:bg-[#f3faff]">
+                QUIERO MI ASESORÍA GRATUITA
+            </button>
+        </div>
+    </section>
+
+    <!-- --- FOOTER (MODIFICADO A OSCURO) --- -->
+    <footer class="bg-gray-900 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <!-- LOGO FOOTER (BDiR MARESME) -->
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="text-xl font-bold tracking-tighter text-bdir-blue font-title">
+                        BDiR <span class="font-light text-gray-400 ml-1 text-lg">Maresme</span>
+                    </div>
+                </div>
+                <!-- Información de Contacto -->
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-gray-300 text-sm">
+                    <!-- CONTENEDOR DE DIRECCIÓN CON ACCIÓN DE MAPA -->
+                    <a href="https://www.google.com/maps/search/?api=1&query=BDiR+Maresme"
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="flex items-center space-x-2 hover:text-bdir-blue transition-colors group cursor-pointer">
+                        <i data-lucide="map-pin" class="h-5 w-5 text-bdir-blue group-hover:scale-110 transition-transform"></i>
+                        <span class="font-medium">Av. Pedrablanca S/N Local 7</span>
+                    </a>
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="phone" class="h-5 w-5 text-bdir-blue"></i>
+                        <span>93 754 87 47</span>
+                    </div>
+                    <!-- Enlace WhatsApp actualizado con ID para traducción -->
+                    <a id="whatsapp-link-footer" href="https://wa.me/34682334580?text=Quiero%20solicitar%20mi%20asesor%C3%ADa%20senior%20gratuita" target="_blank" class="flex items-center space-x-2 hover:text-bdir-blue transition-colors group">
+                        <i data-lucide="message-circle" class="h-5 w-5 text-bdir-blue group-hover:scale-110 transition-transform"></i>
+                        <span class="font-semibold">682 334 580</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
+                <!-- Redes Sociales (Facebook e Instagram) -->
+                <div class="flex space-x-6 md:order-3 mt-4 md:mt-0 justify-center md:justify-end">
+                    <a href="https://www.facebook.com/bdirmaresme/?locale=es_ES" target="_blank" class="text-gray-500 hover:text-bdir-blue transition-colors">
+                        <span class="sr-only">Facebook</span>
+                        <i data-lucide="facebook" class="h-6 w-6"></i>
+                    </a>
+                    <a href="https://www.instagram.com/bdirmaresme/?hl=es" target="_blank" class="text-gray-500 hover:text-bdir-blue transition-colors">
+                        <span class="sr-only">Instagram</span>
+                        <i data-lucide="instagram" class="h-6 w-6"></i>
+                    </a>
+                </div>
+
+                <!-- Enlaces Legales ACTUALIZADOS -->
+                <div class="flex space-x-6 md:order-2 justify-center mt-4 md:mt-0">
+                    <button type="button" onclick="openModal('privacy')" class="text-gray-400 hover:text-gray-300 transition-colors" data-i18n="footer_privacy">Política de Privacidad</button>
+                    <button type="button" onclick="openModal('legal')" class="text-gray-400 hover:text-gray-300 transition-colors" data-i18n="footer_legal">Aviso Legal</button>
+                    <button type="button" onclick="openModal('cookies')" class="text-gray-400 hover:text-gray-300 transition-colors" data-i18n="footer_cookies">Política de Cookies</button>
+                </div>
+
+                <!-- Copyright (BDiR Maresme) -->
+                <p class="mt-8 text-base text-gray-500 md:mt-0 md:order-1 text-center md:text-left" data-i18n="footer_rights">
+                    &copy; 2026 BDiR Maresme. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- --- VENTANA MODAL (POP-UP) DE POLÍTICAS --- -->
+    <div id="policy-modal" class="fixed inset-0 hidden items-center justify-center modal-overlay transition-opacity duration-300" onclick="closeModal()">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="event.stopPropagation()">
+            <!-- Cabecera del Modal -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-900 font-title">Política de Privacidad</h3>
+                <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-100">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                    <span class="sr-only">Cerrar</span>
+                </button>
+            </div>
+            
+            <!-- Contenido del Modal -->
+            <div class="p-6 text-gray-700 space-y-4" id="modal-content">
+                <!-- Este contenido se actualizará mediante JavaScript (i18n) -->
+            </div>
+
+            <!-- Pie del Modal -->
+            <div class="p-4 border-t border-gray-200 text-right sticky bottom-0 bg-white">
+                <button type="button" onclick="closeModal()" class="px-6 py-2 text-sm font-medium rounded-md text-white bg-bdir-blue hover-bg-bdir-dark focus:outline-none focus:ring-2 focus:ring-bdir-blue">
+                    <span data-i18n="modal_close_btn">Entendido</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- FIN MODAL -->
+
+    <!-- JAVASCRIPT: LOGICA + TRADUCCIONES -->
+    <script>
+        // URL de la landing de BDiR Home
+        const BDIR_HOME_URL = 'https://cmbdirmaresme-bot.github.io/landing-bdir-home/#';
+
+        // 1. FUNCIÓN AÑADIDA PARA REDIRECCIÓN (Logo superior)
+        function redirectToHome() {
+            window.location.href = BDIR_HOME_URL;
+        }
+
+        // Inicializa Lucide icons después de que la página se cargue
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // 2. CONFIGURACIÓN DEL EMAIL (IMPORTANTE) - mantenido
+        const emailDestino = "cm.bdirmaresme@gmail.com"; // <--- CAMBIA ESTO POR EL EMAIL REAL SI QUIERES
+
+        // 3. Diccionario de Traducciones y contenidos (ES / CA)
+        const translations = {
+            es: {
+                hero_title_1: "Recupera tu vitalidad",
+                hero_title_2: "Ejercicio adaptado para personas mayores",
+                hero_subtitle: "Programas seguros y personalizados para mejorar movilidad, fuerza y confianza. Actividad en grupo y acompañamiento profesional.",
+                mobile_cta: "Solicitar Asesoría Gratis",
+                form_title: "Asesoría Senior Gratuita",
+                form_subtitle: "Rellena el formulario y te llamamos para valorar un plan de ejercicio a tu ritmo, seguro y personalizado.",
+                label_name: "Nombre y Apellidos",
+                placeholder_name: "Nombre y Apellidos",
+                label_phone: "Teléfono Móvil",
+                placeholder_phone: "Teléfono Móvil",
+                label_email: "Correo Electrónico",
+                placeholder_email: "Correo Electrónico",
+                
+                label_contact_pref: "Forma de contacto preferida",
+                placeholder_contact_pref: "¿Cómo prefieres que te contactemos?",
+                option_phone: "Llamada telefónica",
+                option_whatsapp: "WhatsApp",
+                option_email: "Email",
+                
+                form_accept_prefix: 'He leído y acepto la',
+                form_link_privacy: 'Política de Privacidad',
+                form_accept_and: 'y los',
+                form_link_terms: 'Términos Legales',
+
+                form_button: "QUIERO MI ASESORÍA GRATUITA >>",
+                form_sending: "ENVIANDO...",
+                form_privacy: "Tus datos se usan sólo para gestionar tu cita. No compartiremos tu información.",
+                success_title: "¡Solicitud Recibida!",
+                success_msg: "Nos pondremos en contacto contigo muy pronto para agendar tu asesoría personalizada.",
+                
+                benefits_title_1: "Recupera movimiento y confianza",
+                benefits_title_2: "Programas pensados para mayores",
+                benefit_1_title: "Movilidad y Equilibrio",
+                benefit_1_desc: "Ejercicios suaves y progresivos que reducen caídas y mejoran la independencia en las actividades diarias.",
+                benefit_2_title: "Fuerza Funcional",
+                benefit_2_desc: "Trabajo de fuerza adaptado para mantener autonomía: subir escaleras, incorporarse o llevar bolsas con seguridad.",
+                benefit_3_title: "Compañía y Bienestar",
+                benefit_3_desc: "Clases en grupo y apoyo del equipo profesional para recuperar confianza, mejorar el ánimo y socializar.",
+                social_proof_intro: "\"Volví a sentirme fuerte y segura para hacer mi vida cotidiana.\"",
+                testimonial_quote: "\"Gracias al equipo he recuperado la confianza para salir a pasear y jugar con mis nietos.\"",
+                cta_final_title: "Recupera energía, equilibrio y autonomía",
+                cta_final_desc: "Empieza con una asesoría gratuita para valorar tu estado y diseñar un plan seguro a tu ritmo.",
+                cta_final_btn: "QUIERO MI ASESORÍA GRATUITA",
+                footer_privacy: "Política de Privacidad",
+                footer_legal: "Aviso Legal",
+                footer_cookies: "Política de Cookies",
+                footer_rights: "&copy; 2026 BDiR Maresme. Todos los derechos reservados.",
+                whatsapp_message: "Quiero solicitar mi asesoría senior gratuita",
+
+                // Contenido del Modal de Privacidad (ESPAÑOL)
+                privacy_title: "Política de Privacidad",
+                privacy_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Política de Privacidad de BDiR Maresme</h2>
+                    <p>En BDiR Maresme tratamos los datos personales con confidencialidad y sólo para gestionar la solicitud de asesoría y la comunicación relacionada con nuestros servicios para personas mayores.</p>
+                    <h4 class="font-semibold">1. Responsable del Tratamiento</h4>
+                    <p>BDiR Maresme S.L. es responsable del tratamiento. Los datos que recogemos (nombre, teléfono, email) se usan para gestionar solicitudes y citas.</p>
+                    <h4 class="font-semibold">2. Finalidad</h4>
+                    <p>Atender su solicitud, ofrecer información, agendar citas y comunicar servicios relacionados con la actividad física y el bienestar.</p>
+                    <h4 class="font-semibold">3. Derechos</h4>
+                    <p>Puede ejercer derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad enviando un correo a cm.bdirmaresme@gmail.com.</p>
+                `,
+                 // Contenido del Modal de Aviso Legal (ESPAÑOL)
+                legal_title: "Aviso Legal",
+                legal_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Aviso Legal de BDiR Maresme</h2>
+                    <p>El presente sitio web ofrece información sobre programas de actividad física para personas mayores. La participación en actividades debe realizarse bajo supervisión y siguiendo las indicaciones del personal.</p>
+                    <h4 class="font-semibold">Contacto</h4>
+                    <p>Correo: cm.bdirmaresme@gmail.com</p>
+                `,
+                 // Contenido del Modal de Cookies (ESPAÑOL)
+                cookies_title: "Política de Cookies",
+                cookies_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Política de Cookies de BDiR Maresme</h2>
+                    <p>Usamos cookies técnicas y de análisis para mejorar la experiencia. No almacenamos datos sensibles. Puede desactivar cookies en su navegador.</p>
+                `,
+                modal_close_btn: "Entendido"
+            },
+            ca: {
+                hero_title_1: "Recupera la teva vitalitat",
+                hero_title_2: "Exercici adaptat per a persones grans",
+                hero_subtitle: "Programes segurs i personalitzats per millorar mobilitat, força i confiança. Activitat en grup i acompanyament professional.",
+                mobile_cta: "Sol·licitar Assessoria Gratuïta",
+                form_title: "Assessoria Sènior Gratuïta",
+                form_subtitle: "Omple el formulari i et truquem per valorar un pla d'exercici al teu ritme, segur i personalitzat.",
+                label_name: "Nom i Cognoms",
+                placeholder_name: "Nom i Cognoms",
+                label_phone: "Telèfon Mòbil",
+                placeholder_phone: "Telèfon Mòbil",
+                label_email: "Correu Electrònic",
+                placeholder_email: "Correu Electrònic",
+                
+                label_contact_pref: "Forma de contacte preferida",
+                placeholder_contact_pref: "Com prefereixes que et contactem?",
+                option_phone: "Trucada telefònica",
+                option_whatsapp: "WhatsApp",
+                option_email: "Correu electrònic",
+                
+                form_accept_prefix: 'He llegit i accepto la',
+                form_link_privacy: 'Política de Privacitat',
+                form_accept_and: 'i els',
+                form_link_terms: 'Termes Legals',
+
+                form_button: "VULL LA MEVA ASSESSORIA GRATUÏTA >>",
+                form_sending: "ENVIANT...",
+                form_privacy: "Les teves dades s'utilitzen només per gestionar la teva cita. No compartirem la informació.",
+                success_title: "Sol·licitud Rebuda!",
+                success_msg: "Ens posarem en contacte amb tu molt aviat per programar la teva assessoria personalitzada.",
+                
+                benefits_title_1: "Recupera moviment i confiança",
+                benefits_title_2: "Programes pensats per a majors",
+                benefit_1_title: "Mobilitat i Equilibri",
+                benefit_1_desc: "Exercicis suaus i progressius que redueixen caigudes i milloren la independència en les activitats diàries.",
+                benefit_2_title: "Força Funcional",
+                benefit_2_desc: "Treball de força adaptat per mantenir autonomia: pujar escales, incorporar-se o portar bosses amb seguretat.",
+                benefit_3_title: "Companyia i Benestar",
+                benefit_3_desc: "Classes en grup i suport de l'equip professional per recuperar confiança, millorar l'ànim i socialitzar.",
+                social_proof_intro: "\"Vaig recuperar la confiança per tornar a passejar i gaudir amb la meva família.\"",
+                testimonial_quote: "\"Gràcies a l'equip he recuperat la confiança per sortir a passejar i jugar amb els meus néts.\"",
+                cta_final_title: "Recupera energia, equilibri i autonomia",
+                cta_final_desc: "Comença amb una assessoria gratuïta per valorar el teu estat i dissenyar un pla segur al teu ritme.",
+                cta_final_btn: "VULL LA MEVA ASSESSORIA GRATUÏTA",
+                footer_privacy: "Política de Privacitat",
+                footer_legal: "Avís Legal",
+                footer_cookies: "Política de Galetes",
+                footer_rights: "&copy; 2026 BDiR Maresme. Tots els drets reservats.",
+                whatsapp_message: "Vull sol·licitar la meva assessoria sènior gratuïta",
+
+                privacy_title: "Política de Privacitat",
+                privacy_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Política de Privacitat de BDiR Maresme</h2>
+                    <p>A BDiR Maresme tractem les dades personals amb confidencialitat i només per gestionar la sol·licitud d'assessoria i la comunicació relacionada amb els nostres serveis per a persones grans.</p>
+                    <h4 class="font-semibold">1. Responsable del Tractament</h4>
+                    <p>BDiR Maresme S.L. és responsable del tractament. Les dades recollides (nom, telèfon, email) s'utilitzen per gestionar sol·licituds i cites.</p>
+                    <h4 class="font-semibold">2. Finalitat</h4>
+                    <p>Atendre la seva sol·licitud, oferir informació, programar cites i comunicar serveis relacionats amb l'activitat física i el benestar.</p>
+                    <h4 class="font-semibold">3. Drets</h4>
+                    <p>Pot exercir drets d'accés, rectificació, supressió, oposició, limitació i portabilitat enviant un correu a cm.bdirmaresme@gmail.com.</p>
+                `,
+                legal_title: "Avís Legal",
+                legal_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Avís Legal de BDiR Maresme</h2>
+                    <p>El present lloc web ofereix informació sobre programes d'activitat física per a persones grans. La participació en activitats s'ha de fer sota supervisió i seguint les indicacions del personal.</p>
+                    <h4 class="font-semibold">Contacte</h4>
+                    <p>Correu: cm.bdirmaresme@gmail.com</p>
+                `,
+                cookies_title: "Política de Galetes",
+                cookies_content: `
+                    <h2 class="text-lg font-bold text-bdir-blue">Política de Galetes de BDiR Maresme</h2>
+                    <p>Fem servir galetes tècniques i d'anàlisi per millorar l'experiència. No emmagatzemem dades sensibles. Podeu desactivar les galetes al navegador.</p>
+                `,
+                modal_close_btn: "Entès"
+            }
+        };
+
+        // 4. Función para cambiar el idioma
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];  
+                }
+            });
+
+            const inputs = document.querySelectorAll('[data-i18n-placeholder]');
+            inputs.forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            const options = document.querySelectorAll('option[data-i18n]');
+             options.forEach(op => {
+                const key = op.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    op.text = translations[lang][key];
+                }
+            });
+
+            const whatsappLink = document.getElementById('whatsapp-link-footer');
+            const message = translations[lang]['whatsapp_message'];
+            if (whatsappLink && message) {
+                const encodedMessage = encodeURIComponent(message);
+                whatsappLink.href = `https://wa.me/34682334580?text=${encodedMessage}`;
+            }
+
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-ca').classList.toggle('active', lang === 'ca');
+            document.documentElement.lang = lang;
+        }
+
+        // 5. LÓGICA DEL MODAL - SOPORTA 'privacy', 'legal' y 'cookies'
+        function openModal(type) {
+            const modal = document.getElementById('policy-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const currentLang = document.documentElement.lang || 'es';
+
+            let titleKey, contentKey;
+
+            if (type === 'privacy') {
+                titleKey = 'privacy_title';
+                contentKey = 'privacy_content';
+            } else if (type === 'legal') {
+                titleKey = 'legal_title';
+                contentKey = 'legal_content';
+            } else if (type === 'cookies') {
+                titleKey = 'cookies_title';
+                contentKey = 'cookies_content';
+            } else {
+                console.error("Tipo de modal no reconocido:", type);
+                return;
+            }
+
+            modalTitle.innerHTML = translations[currentLang][titleKey] || titleKey;
+            modalContent.innerHTML = translations[currentLang][contentKey] || 'Contenido no encontrado.';
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex', 'fixed', 'inset-0', 'items-center', 'justify-center', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+            document.body.classList.add('overflow-hidden');
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('policy-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }, 300);
+        }
+
+        // Inicializa el idioma al cargar la página (ES por defecto)
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage('es');
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // 6. FUNCIÓN DE ENVÍO REAL (AJAX a FormSubmit) - mantenida
+        function submitForm(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const formView = document.getElementById('form-view');
+            const successView = document.getElementById('success-view');
+
+            const currentLang = document.documentElement.lang;
+            const originalText = translations[currentLang].form_button;
+            const sendingText = translations[currentLang].form_sending;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> ${sendingText}`;
+
+            const formData = new FormData(e.target);
+            formData.append('Origen', 'Landing Senior - BDiR Maresme');
+            formData.append('Idioma', currentLang);
+
+            fetch(`https://formsubmit.co/ajax/${emailDestino}`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(response => {
+                return new Promise(resolve => setTimeout(() => resolve(response), 800));
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    formView.classList.add('hidden');
+                    successView.classList.remove('hidden');
+                    document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    console.error("Error FormSubmit:", data);
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    console.error('Ha ocurrido un error al enviar el formulario. Por favor, inténtalo de nuevo.');
+                }
+            })
+            .catch(error => {
+                console.error('Error de red:', error);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                console.error('Ha ocurrido un error de conexión. Inténtalo de nuevo o contáctanos por teléfono.');
+            });
+        }
+    </script>
+</body>
+</html>
